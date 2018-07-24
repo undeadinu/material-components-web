@@ -40,11 +40,8 @@ export default class MDCSelectFoundation extends MDCFoundation {
       deactivateBottomLine: () => {},
       registerInteractionHandler: (/* type: string, handler: EventListener */) => {},
       deregisterInteractionHandler: (/* type: string, handler: EventListener */) => {},
-      getSelectedIndex: () => /* number */ -1,
-      setSelectedIndex: (/* index: number */) => {},
       setDisabled: (/* disabled: boolean */) => {},
       getValue: () => /* string */ '',
-      setValue: (/* value: string */) => {},
       isRtl: () => false,
       hasLabel: () => {},
       getLabelWidth: () => {},
@@ -59,7 +56,7 @@ export default class MDCSelectFoundation extends MDCFoundation {
 
     this.focusHandler_ = (evt) => this.handleFocus_(evt);
     this.blurHandler_ = (evt) => this.handleBlur_(evt);
-    this.selectionHandler_ = (evt) => this.handleSelect_(evt);
+    this.selectionHandler_ = () => this.handleValueChange();
   }
 
   init() {
@@ -72,16 +69,6 @@ export default class MDCSelectFoundation extends MDCFoundation {
     this.adapter_.deregisterInteractionHandler('focus', this.focusHandler_);
     this.adapter_.deregisterInteractionHandler('blur', this.blurHandler_);
     this.adapter_.deregisterInteractionHandler('change', this.selectionHandler_);
-  }
-
-  setSelectedIndex(index) {
-    this.adapter_.setSelectedIndex(index);
-    this.floatLabelWithValue_();
-  }
-
-  setValue(value) {
-    this.adapter_.setValue(value);
-    this.setSelectedIndex(this.adapter_.getSelectedIndex());
   }
 
   setDisabled(disabled) {
@@ -111,8 +98,8 @@ export default class MDCSelectFoundation extends MDCFoundation {
     this.adapter_.deactivateBottomLine();
   }
 
-  handleSelect_() {
-    this.setSelectedIndex(this.adapter_.getSelectedIndex());
+  handleValueChange() {
+    this.floatLabelWithValue_();
   }
 
   /**

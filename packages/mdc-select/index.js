@@ -35,7 +35,8 @@ export class MDCSelect extends MDCComponent {
   }
 
   set value(value) {
-    this.foundation_.setValue(value);
+    this.nativeControl_.value = value;
+    this.foundation_.handleValueChange(value);
   }
 
   get selectedIndex() {
@@ -43,7 +44,9 @@ export class MDCSelect extends MDCComponent {
   }
 
   set selectedIndex(selectedIndex) {
-    this.foundation_.setSelectedIndex(selectedIndex);
+    const value = this.nativeControl_.options[selectedIndex].value;
+    this.nativeControl_.value = value;
+    this.foundation_.handleValueChange(value);
   }
 
   get disabled() {
@@ -112,10 +115,7 @@ export class MDCSelect extends MDCComponent {
       setDisabled: (disabled) => this.nativeControl_.disabled = disabled,
       registerInteractionHandler: (type, handler) => this.nativeControl_.addEventListener(type, handler),
       deregisterInteractionHandler: (type, handler) => this.nativeControl_.removeEventListener(type, handler),
-      getSelectedIndex: () => this.nativeControl_.selectedIndex,
-      setSelectedIndex: (index) => this.nativeControl_.selectedIndex = index,
       getValue: () => this.nativeControl_.value,
-      setValue: (value) => this.nativeControl_.value = value,
       isRtl: () => window.getComputedStyle(this.root_).getPropertyValue('direction') === 'rtl',
     },
     this.getOutlineAdapterMethods_(),
